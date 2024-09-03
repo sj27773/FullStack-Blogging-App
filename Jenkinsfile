@@ -1,16 +1,23 @@
-pipeline { 
+pipeline {
     agent any
-    
     tools {
         maven 'maven3'
         jdk 'jdk17'
     }
+    environment {
+        SCANNER_HOME= tool 'sonar-scanner'
+}
 
     stages {
-        
+        stage('gitcheckout') {
+            steps {
+                git branch: 'main', credentialsId: 'git-cred', url: 'https://github.com/sj27773/FullStack-Blogging-App.git'
+            }
+        }
+
         stage('Compile') {
             steps {
-            sh  "mvn compile"
+                sh "mvn compile"
             }
         }
         
@@ -19,11 +26,6 @@ pipeline {
                 sh "mvn test"
             }
         }
-        
-        stage('Package') {
-            steps {
-                sh "mvn package"
-            }
-        }
     }
 }
+
