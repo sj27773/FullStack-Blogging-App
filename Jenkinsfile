@@ -25,6 +25,16 @@ pipeline {
             steps {
                 sh "mvn test"
             }
+        stage('Trivy FS Scan') {
+            steps {
+                sh 'trivy fs --format table -o fs.html .'
+        stage('Sonar Analysis') {
+            steps {
+                withSonarQubeEnv('sonar') {
+                sh ''' $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=taskmaster -Dsonar.projectKey=taskmaster \ -Dsonar.java.binaries=target '''
+}
+}
+}
         }
     }
 }
