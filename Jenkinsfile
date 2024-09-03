@@ -5,8 +5,8 @@ pipeline {
         jdk 'jdk17'
     }
     environment {
-        SCANNER_HOME= tool 'sonar-scanner'
-}
+        SCANNER_HOME = tool 'sonar-scanner'
+    }
 
     stages {
         stage('gitcheckout') {
@@ -25,17 +25,35 @@ pipeline {
             steps {
                 sh "mvn test"
             }
+        }
+
         stage('Trivy FS Scan') {
             steps {
                 sh 'trivy fs --format table -o fs.html .'
+            }
+        }
+        
         stage('Sonar Analysis') {
             steps {
                 withSonarQubeEnv('sonar') {
-                sh ''' $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=taskmaster -Dsonar.projectKey=taskmaster \ -Dsonar.java.binaries=target '''
-}
-}
-}
+                    sh '''
+                    $SCANNER_HOME/bin/sonar-scanner \
+                    -Dsonar.projectName=taskmaster \
+                    -Dsonar.projectKey=taskmaster \
+                    -Dsonar.java.binaries=target
+                    '''
+                }
+            }
+        }
+
+        stage('Docker Build & Tag') {
+            steps {
+                script {
+                    withDockerRegistry(credentialsId: 'docker-cred', toolName: 'docker') {
+                        sh 'docker build -t sj27773/taskmaster:latest .'
+                    }   
+                }
+            }
         }
     }
 }
-
