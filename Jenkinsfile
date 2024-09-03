@@ -43,16 +43,17 @@ pipeline {
                     }
                 }
             }
+        }
         stage('K8 Deploy') {
             steps {
                 withKubeConfig(caCertificate: '', clusterName: 'devopsshack-cluster',
                        contextName: '', credentialsId: 'k8-cred', namespace: 'webapps',
                        restrictKubeConfigAccess: false, serverUrl:
                        'https://0B4099E78C18E7E0A52C1F3D8EFCAFE0.gr7.us-east-1.eks.amazonaws.com') {
-            sh 'kubectl apply -f deployment-service.yml'
-            sleep 30
+                    sh 'kubectl apply -f deployment-service.yml'
+                    sleep 30
+                }
+            }
         }
     }
 }
-
-
