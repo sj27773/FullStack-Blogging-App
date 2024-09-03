@@ -35,7 +35,7 @@ pipeline {
         
         stage('Sonar Analysis') {
             steps {
-                withSonarQubeEnv('sonar') {
+                withSonarQubeEnv('sonar-scanner') {
                     sh '''
                     $SCANNER_HOME/bin/sonar-scanner \
                     -Dsonar.projectName=taskmaster \
@@ -57,3 +57,4 @@ pipeline {
         }
     }
 }
+
