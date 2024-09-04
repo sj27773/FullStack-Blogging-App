@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: bloggingapp
-          image: sj27773/bloggingapp:latest # Updated image to private DockerHub image
+          image: sj27773/taskmaster:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 8081
