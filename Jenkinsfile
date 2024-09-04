@@ -40,7 +40,7 @@ pipeline {
                 script {
                     withDockerRegistry(credentialsId: 'docker-cred', toolName: 'docker') {
                         sh 'docker build -t sj27773/taskmaster:latest .'
-                        sh 'docker push sj27773/taskmaster:latest .'
+                        sh 'docker push sj27773/taskmaster:latest'
                     }
                 }
             }
